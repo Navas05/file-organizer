@@ -12,7 +12,7 @@ def_directions = {".png" : os.path.join(home_path, "Pictures"),
 def move_file(file_path, destination_path):
     shutil.move(file_path, destination_path)    #moved to a secondary function in case you want to change shutil for os.replace() or similar
 
-def organize_directory(directory):
+def organize_directory(directory, final_destination):
     for element in os.listdir(directory):
         element_path = os.path.join(directory, element)
         if os.path.isfile(element_path):
@@ -29,15 +29,15 @@ def organize_directory(directory):
             else :
                 folder_name = extension[1:]
                 boolean = False
-                final_destination = os.path.join(home_path, "Documents", folder_name)
 
-                for subdirectory in os.listdir(os.path.join(home_path, "Documents")):
+                subfolder = os.path.join(final_destination, folder_name)
+
+                for subdirectory in os.listdir(final_destination):
                     if subdirectory == folder_name:
                         boolean = True
-                        move_file(element_path, final_destination)
-                        print("Moved " + element + " to " + final_destination)
+                        move_file(element_path, os.path.join(subfolder, element))
+                        print("Moved " + element + " to " + subfolder)
                 if boolean == False:
-                    os.makedirs(final_destination, exist_ok=True)
-                    move_file(element_path, final_destination)
+                    os.makedirs(subfolder, exist_ok=True)
+                    move_file(element_path, os.path.join(subfolder, element))
 
-organize_directory(os.path.join(home_path, "Downloads"))
